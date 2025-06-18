@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/database/db_setup.ts","./src/routes/add_user.ts","./src/routes/fund_balance.ts","./src/routes/order_book.ts"],"version":"5.8.3"}
+{"root":["./src/index.ts","./src/database/db_setup.ts","./src/routes/add_user.ts","./src/routes/order_book.ts"],"version":"5.8.3"}

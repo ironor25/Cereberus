@@ -182,13 +182,13 @@ function BuySellUI({uid}:BuySellProps){
             <div className="p-2 ">
                 {side ? (
                     <button 
-                        className="border-green-500 border-2 rounded-xl w-lg p-2 text-sm cursor-pointer hover:bg-green-500 transition duration-400 ease-in-out" 
+                        className="border-green-500 border-2 rounded-xl w-sm p-2 text-sm cursor-pointer hover:bg-green-500 transition duration-400 ease-in-out" 
                         onClick={() => place_order()}
                     >
                         Long/Buy
                     </button>
                 ) : (
-                    <button className="border-red-500 border-2 p-2 rounded-xl w-lg text-sm cursor-pointer hover:bg-red-500 transition duration-400 ease-in-out" onClick={()=>place_order()}>Short/Sell</button>
+                    <button className="border-red-500 border-2 p-2 rounded-xl w-sm text-sm cursor-pointer hover:bg-red-500 transition duration-400 ease-in-out" onClick={()=>place_order()}>Short/Sell</button>
                 )}
             </div>
             <div className="border-2 border-amber-50 mt-4 ml-3 h-37 rounded-xl">

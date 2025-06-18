@@ -2,7 +2,6 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import add_user_routes from "./routes/add_user";
-import balance_routes from "./routes/fund_balance";
 import order_book_routes from "./routes/order_book";
 
 import http from "http";
@@ -21,7 +20,6 @@ app.use(cors());
 
 // Routes
 app.use(add_user_routes);
-app.use(balance_routes);
 app.use(order_book_routes);
 
 // WebSocket connection handler
@@ -43,3 +41,5 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`HTTP + WebSocket server running on port ${PORT}`);
 });
+
+export {wss};

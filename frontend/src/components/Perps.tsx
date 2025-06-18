@@ -2,6 +2,7 @@
 import { useState } from "react";
 import BuySellUI from "./BuySellUI";
 import Fundme from "../services/Fundme";
+import OrderBook from "./OrderBook";
 
 interface PerpsProps {
   uid: string;
@@ -11,7 +12,7 @@ function Perps({ uid }: PerpsProps) {
     const [pair,setpair] = useState("BTC")
     let link = `https://s.tradingview.com/widgetembed/?symbol=${pair}USD&interval=15&theme=dark&style=1&locale=en`
     return (
-        <div className="text-white ">
+        <div className="text-white">
             <div className="h-18 flex border-2 border-white  mt-2">
                 <div className="flex border-r-2 w-1/5" >
                 <div className=" mt-2 ml-5 space-x-3">
@@ -66,10 +67,11 @@ function Perps({ uid }: PerpsProps) {
                     style={{ width: "100%", height: "100%" }}
                 />
             </div>
-            <div className="w-2xl bg-slate-600/50"
+            <OrderBook/>
+            <div className="w-md bg-slate-600/50"
             style={{ height: 'calc(90vh - 192px - 96px)' }} >
                     
-                    <BuySellUI uid = {uid}/>
+            <BuySellUI uid = {uid}/>
             </div>
             </div>
         </div>

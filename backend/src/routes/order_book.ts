@@ -1,6 +1,6 @@
 import express, { response } from "express";
-
-
+// Import the WebSocket server instance from the main server file
+import { wss } from "../index";
 
 const order_book_routes = express.Router();
 
@@ -40,69 +40,6 @@ const bids: Order[] = [];
 const asks : Order[] = [];
 
 
-// function find_user(uid : string)  {
-//     for (let i=0; i<balance.length;i++) {
-//             if (balance[i].uid){
-//                 return i;
-//             }
-//             else{
-//                 balance.push({"uid":uid,"balance":0})
-//                 return find_user(uid)
-//             }
-//     }
-// }
-
-// function update_balance(uid: string, fund: number) {
-//     const index = find_user(uid);
-//     if (index) {
-//         balance[index].balance = fund;
-//     }
-
-// }
-
-// function get_balance(uid:string) {
-//     const index = find_user(uid);
-//     if (index){
-//             return balance[index].balance
-//     }
-
-// }
-
-order_book_routes.post('/fund',async (req,res) => {
-   const fundtype = req.body.fundtype
-   const uid = req.body.uid
-   let message = ""
-   if (fundtype){
-        const cash = req.body.cash
-        let user_details =  balances.find(x => x.uid == uid)
-        if (user_details){
-            user_details.assets["CASH"] = cash
-            message = "Cash Balance updated!"
-    }
-            
-        else{
-            message = "User not found"
-        }
-   }
-   else{
-    const ticker = req.body.ticker
-    const qty  = req.body.qty
-    let user_details =  balances.find(x => x.uid == uid)
-    if (user_details){
-        user_details.assets[ticker] = (user_details.assets[ticker] || 0) + qty
-        message = "Asset Balance updated!"
-    }
-    else{
-        message ="User not found!"
-    }
-   }
-    res.status(200).json({
-        "message": message
-    })
-})
-
-
-
 order_book_routes.get("/assets",(req: any, res: any) => {
     const uid = req.query.uid;
     const user_details = balances.find(x => x.uid == uid)
@@ -111,7 +48,7 @@ order_book_routes.get("/assets",(req: any, res: any) => {
     })
 })
 
-order_book_routes.post("/add_user",(req: any, res: any) => {
+order_book_routes.post("/add_update_details",(req: any, res: any) => {
     const uid = req.body.uid
 
     const  mode = req.body.mode
@@ -184,6 +121,7 @@ order_book_routes.post("/limit-order", (req: any, res: any) => {
                 })
 
                 bids.sort((a, b) => a.price < b.price ? -1 : 1);  //sorting in ascending order
+                
                 console.log("asks",asks)
                 console.log("bids:",bids)}
             else{
@@ -219,7 +157,7 @@ order_book_routes.post("/limit-order", (req: any, res: any) => {
     
 
         const remaining_qty = fillOrders(side,price , qty, uid,ticker) 
-
+        broadcastOrderBook();
         if (remaining_qty == 0 ){
             return res.json({
             "filled_Qty" : qty
@@ -345,6 +283,25 @@ function fillOrders(side:  string , price:  number , qty: number , uid : string 
     }
 
 
+}
+
+function broadcastOrderBook() {
+  const message = JSON.stringify({
+    type: "orderBook",
+    bids,
+    asks
+  });
+
+  wss.clients.forEach((client) => {
+    if (client.readyState === 1) {
+      client.send(message);
+        console.log("📢 Broadcasting OrderBook:");
+        console.log("Bids:", bids);
+        console.log("Asks:", asks);
+        console.log("Clients connected:", wss.clients.size);
+
+    }
+  });
 }
 
 export default order_book_routes;

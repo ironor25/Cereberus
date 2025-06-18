@@ -1,11 +1,8 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface FundmeProps {
   uid: string;
-  ticker : string;
-  amount : number;
-  quantity : number;
 }
 
 
@@ -22,6 +19,16 @@ export default function Fundme({ uid }: FundmeProps) {
   const [ticker,setticker] = useState<string>("")
   const [Quantity,setQuantity] = useState("");
   
+  useEffect(() => {
+    const fetchBalance = async () => {
+      let cash_balance = await axios.get('http://127.0.0.1:3000/assets', { params: { "uid": uid } });
+      console.log(cash_balance)
+      setBalance(cash_balance.data.assets["CASH"]);
+    };
+    fetchBalance();
+  }, []);
+
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (fundType) {
@@ -29,7 +36,7 @@ export default function Fundme({ uid }: FundmeProps) {
       if (cash > 0) {
         console.log("Updated Balance:", balance +cash);
         
-        await axios.post('http://127.0.0.1:3000/add_user', { 
+        await axios.post('http://127.0.0.1:3000/add_update_details', { 
           "uid": uid,
           "cash": amount,
           "fundtype":fundType } );
@@ -38,7 +45,7 @@ export default function Fundme({ uid }: FundmeProps) {
         const qty = Number(Quantity)
         if (ticker && qty > 0) {
         console.log("Ticker:", ticker, "Quantity:", qty);
-        await axios.post('http://127.0.0.1:3000/add_user', { 
+        await axios.post('http://127.0.0.1:3000/add_update_details', { 
          "uid": uid,
          "ticker": ticker,
           "qty":qty,
