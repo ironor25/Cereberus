@@ -7,7 +7,7 @@ import GoogleAuth from './middlewares/FirebaseAuth';
 import { useState } from 'react';
 import Portfolio from './components/Portfolio';
 import Coin from './components/Coin';
-import FeedbackForm from './components/FeedbackForm';
+
 
 
 
