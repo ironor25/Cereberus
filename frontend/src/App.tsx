@@ -31,7 +31,7 @@ function App() {
           <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/perpetuals")}}>Perpetuals</a>
           <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/portfolio")}}>Portfolio</a>
           <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/coins")}}>Coins</a>
-          <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/feedback")}}>Feedback</a>
+          
         </nav>
         <div className='p-3'>
           <GoogleAuth details={details} setdetails={setdetails} />
