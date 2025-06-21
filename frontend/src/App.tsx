@@ -43,7 +43,6 @@ function App() {
        <Route path='/' element={<Swap />} />
        <Route path='/perpetuals' element={<Perps uid={details.UID ?? ""} />} />
        <Route path='/portfolio' element={<Portfolio uid={details.UID ?? ""} />} />
-       {/* <Route path='/feedback' element={<FeedbackForm name={details.name ?? ""} email={details.email ?? ""} />} /> */}
        <Route path='/coins' element={<Coin />} />
      </Routes>
       </div>
