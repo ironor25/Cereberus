@@ -52,7 +52,7 @@ function Swap(){
             </div>
           </div>
           <div className="m-2 h-15  w-xl flex">
-          <button className="bg-lime-200 text-gray-800 w-xl rounded-2xl cursor-pointer">Connect</button>
+          <button className="bg-lime-300 hover:bg-lime-500 text-gray-800 w-xl rounded-2xl cursor-pointer">Connect</button>
           </div>
         </div>
       </div>

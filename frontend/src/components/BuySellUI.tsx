@@ -4,16 +4,18 @@ import axios  from "axios";
 
 interface BuySellProps {
   uid: string;
+  ticker: string;
+  setTicker: (ticker: string) => void;
 }
 
 interface Message { message: string , success:Boolean}
 
-function BuySellUI({uid}:BuySellProps){
+function BuySellUI({uid, ticker, setTicker}:BuySellProps){
+    let url = import.meta.env.VITE_BASE_URL
     const [side, setside] = useState<Boolean>(true)
     const [leverage, setLeverage] = useState<number>(1);
     const [price, setPrice] = useState<number>(0);
     const [qty, setQty] = useState<number>(0);
-    const [ticker, setticker] = useState<string>("ETHUSD");
     const [showSuccess, setShowSuccess] = useState(false);
     const [msg ,setmsg] = useState("")
     const [success, setsuccess] = useState(false);
@@ -37,9 +39,24 @@ function BuySellUI({uid}:BuySellProps){
 }
 
     function place_order()  {
-        console.log("i m etting cLLED")
         if (!price || !qty || !uid || !ticker) {
-            console.log("somethign is mmissing")
+            setsuccess(false)
+            setShowSuccess(true);
+            if (!uid){
+                setmsg("Login to place order.")
+                setTimeout(() => setShowSuccess(false), 3000);
+            }
+            else{
+                if (!price){
+                setmsg("Price is missing.")
+                setTimeout(() => setShowSuccess(false), 3000);
+            }
+                if (!qty){
+                    setmsg("Quantity is missing.")
+                    setTimeout(() => setShowSuccess(false), 3000);
+                }
+            }
+            
             return;
         }
         console.log( {
@@ -49,7 +66,7 @@ function BuySellUI({uid}:BuySellProps){
             "uid": uid,
             "ticker": ticker
         })
-        axios.post("http://127.0.0.1:3000/limit-order", {
+        axios.post(`${url}/limit-order`, {
             "side": side ? "bid" : "ask",
             "price": price,
             "qty": qty,
@@ -102,32 +119,32 @@ function BuySellUI({uid}:BuySellProps){
                     <button className="p-1 pr-4 text-xs font-medium">Limit</button>
                 </div>
                 <div className="bg-slate-900 flex rounded-xl ml-4 p-2 w-20 justify-end">
-                    <span className="text-xs font-medium">$160.50</span>
+                    <span className="text-xs">$160.50</span>
                 </div>
             </div>
 
             <div className="p-2 h-56">
                 <div className="h-1/2 bg-slate-900 rounded-t-2xl">
-                <div className="flex justify-between p-3">
+                <div className="flex justify-between p-2 pt-3">
                     {side ? 
-                    <span>You're buying at</span>:
-                    <span>You're selling at</span>
+                    <span className="w-1/2">Buying at</span>:
+                    <span className="w-1/2" >Selling at</span>
                     }
                     <input 
                         type="number" 
-                        className="text-right no-spinner p-1"
+                        className="w-1/2 text-right no-spinner outline-none focus:outline-none focus:ring-0 focus:border-transparent"
                         autoFocus
                         placeholder="$00.0"
                         required
                         onBlur={(e) => setPrice(Number(e.target.value))}
                     />
                 </div>
-                <div className="flex justify-between p-3">
+                <div className="flex justify-between p-1 pt-3">
                     
-                        <select 
-                            className="cursor-pointer" 
-                            value={ticker} 
-                            onChange={(e) => setticker(e.target.value)}
+                        <select
+                            className="cursor-pointer "
+                            value={ticker}
+                            onChange={e => setTicker(e.target.value)}
                         >
                             <option value="ETHUSD" className="text-black">ETHUSD</option>
                             <option value="BTCUSD" className="text-black">BTCUSD</option>
@@ -136,7 +153,7 @@ function BuySellUI({uid}:BuySellProps){
             
                     <input 
                         type="number" 
-                        className="text-right no-spinner p-1"
+                        className="text-right no-spinner p-1 outline-none focus:outline-none focus:ring-0 focus:border-transparent"
                         autoFocus
                         placeholder="00.0"
                         required
@@ -182,13 +199,13 @@ function BuySellUI({uid}:BuySellProps){
             <div className="p-2 ">
                 {side ? (
                     <button 
-                        className="border-green-500 border-2 rounded-xl w-sm p-2 text-sm cursor-pointer hover:bg-green-500 transition duration-400 ease-in-out" 
+                        className="border-green-500 border-2 rounded-xl w-full p-2 text-sm cursor-pointer hover:bg-green-500 transition duration-400 ease-in-out" 
                         onClick={() => place_order()}
                     >
                         Long/Buy
                     </button>
                 ) : (
-                    <button className="border-red-500 border-2 p-2 rounded-xl w-sm text-sm cursor-pointer hover:bg-red-500 transition duration-400 ease-in-out" onClick={()=>place_order()}>Short/Sell</button>
+                    <button className="border-red-500 border-2 p-2 rounded-xl w-full text-sm cursor-pointer hover:bg-red-500 transition duration-400 ease-in-out" onClick={()=>place_order()}>Short/Sell</button>
                 )}
             </div>
             <div className="border-2 border-amber-50 mt-4 ml-3 h-37 rounded-xl">

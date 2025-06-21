@@ -12,6 +12,7 @@ interface FundmeProps {
 }
 
 export default function Fundme({ uid }: FundmeProps) {
+  let url = import.meta.env.VITE_BASE_URL
   const [amount, setAmount] = useState("");
   const [balance, setBalance] = useState(0);
   const [showForm, setShowForm] = useState(false);
@@ -21,9 +22,9 @@ export default function Fundme({ uid }: FundmeProps) {
   
   useEffect(() => {
     const fetchBalance = async () => {
-      let cash_balance = await axios.get('http://127.0.0.1:3000/assets', { params: { "uid": uid } });
+      let cash_balance = await axios.get(`${url}/assets`, { params: { "uid": uid } });
       console.log(cash_balance)
-      setBalance(cash_balance.data.assets["CASH"]);
+      setBalance(cash_balance.data.assets && cash_balance.data.assets["CASH"] ? cash_balance.data.assets["CASH"] : 0);
     };
     fetchBalance();
   }, []);
@@ -36,7 +37,7 @@ export default function Fundme({ uid }: FundmeProps) {
       if (cash > 0) {
         console.log("Updated Balance:", balance +cash);
         
-        await axios.post('http://127.0.0.1:3000/add_update_details', { 
+        await axios.post(`${url}/add_update_details`, { 
           "uid": uid,
           "cash": amount,
           "fundtype":fundType } );
@@ -45,7 +46,7 @@ export default function Fundme({ uid }: FundmeProps) {
         const qty = Number(Quantity)
         if (ticker && qty > 0) {
         console.log("Ticker:", ticker, "Quantity:", qty);
-        await axios.post('http://127.0.0.1:3000/add_update_details', { 
+        await axios.post(`${url}/add_update_details`, { 
          "uid": uid,
          "ticker": ticker,
           "qty":qty,
@@ -54,7 +55,7 @@ export default function Fundme({ uid }: FundmeProps) {
       }
 
     }
-    let cash_balance   = await axios.get('http://127.0.0.1:3000/assets', { params: { "uid": uid } })
+    let cash_balance   = await axios.get(`${url}/assets`, { params: { "uid": uid } })
     setBalance(cash_balance.data.assets["CASH"]);
     setAmount("");
     setticker("");
@@ -92,16 +93,21 @@ export default function Fundme({ uid }: FundmeProps) {
               />
             </label>)
             :
-            (<label className=" font-medium" >
-              Ticker : 
-               <input
-                type="text"
-                min={1}
+            <label className="font-medium">
+              Asset:
+              <select
                 value={ticker}
                 onChange={e => setticker(e.target.value)}
                 className="block border rounded-md px-4 py-2 mt-1 w-full text-black"
                 required
-              />
+              >
+                <option value="" disabled>
+                  Select Asset
+                </option>
+                <option value="ETHUSD">ETHUSD</option>
+                <option value="BTCUSD">BTCUSD</option>
+                <option value="SOLUSD">SOLUSD</option>
+              </select>
               Quantity
               <input
                 type="number"
@@ -110,8 +116,9 @@ export default function Fundme({ uid }: FundmeProps) {
                 onChange={e => setQuantity(e.target.value)}
                 className="block border rounded-md px-4 py-2 mt-1 w-full text-black"
                 required
+                disabled={!ticker}
               />
-            </label>)}
+            </label>}
             <input
               type="submit"
               value="Submit"
@@ -122,7 +129,7 @@ export default function Fundme({ uid }: FundmeProps) {
       ) : (
         <button
           onClick={() => setShowForm(true)}
-          className="p-2 w-30 bg-blue-300 mt-4 rounded-md hover:bg-blue-500 text-black font-medium"
+          className="p-2 w-30 bg-lime-300 mt-4 rounded-md hover:bg-lime-500 text-black font-medium"
         >
           Fund Wallet
         </button>

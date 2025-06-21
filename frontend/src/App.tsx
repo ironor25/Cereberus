@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import Swap from './components/Swap';
 import GoogleAuth from './middlewares/FirebaseAuth';
 import { useState } from 'react';
+import Portfolio from './components/Portfolio';
+import Coin from './components/Coin';
+import FeedbackForm from './components/FeedbackForm';
 
 
 
@@ -20,14 +23,15 @@ function App() {
        <div className='h-screen w-screen bg-black'>
       <div className='flex  justify-between border-2 border-white'>
         <div className='flex text-white'>
-          <img src='./aurex.png' className='h-18'/>
-          <span className='pt-6'>Aurex</span>
+          <img src='./cerberus2.png' className='h-18 p-2'/>
+          
         </div>
         <nav className='text-white p-6'>
-          <a className='p-8 cursor-pointer' onClick={()=>{navigate("/")}}>Swap</a>
-          <a className='p-8 cursor-pointer' onClick={()=>{navigate("/perpetuals")}}>Perpetuals</a>
-          <a className='p-8 cursor-pointer' >Coins</a>
-          <a className='p-8 cursor-pointer'>Portfolio</a>
+          <a className='p-8 cursor-pointer text-white hover:text-lime-300  ' onClick={()=>{navigate("/")}}>Swap</a>
+          <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/perpetuals")}}>Perpetuals</a>
+          <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/portfolio")}}>Portfolio</a>
+          <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/coins")}}>Coins</a>
+          <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/feedback")}}>Feedback</a>
         </nav>
         <div className='p-3'>
           <GoogleAuth details={details} setdetails={setdetails} />
@@ -35,10 +39,13 @@ function App() {
       </div>
 
     
-     <Routes>
-        <Route path='/' element={<Swap />} />
-        <Route path='/perpetuals' element={<Perps uid={details.UID ?? ""} />} />
-      </Routes>
+    <Routes>
+       <Route path='/' element={<Swap />} />
+       <Route path='/perpetuals' element={<Perps uid={details.UID ?? ""} />} />
+       <Route path='/portfolio' element={<Portfolio uid={details.UID ?? ""} />} />
+       <Route path='/feedback' element={<FeedbackForm name={details.name ?? ""} email={details.email ?? ""} />} />
+       <Route path='/coins' element={<Coin />} />
+     </Routes>
       </div>
   )
 }

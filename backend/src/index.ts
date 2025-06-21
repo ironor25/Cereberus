@@ -6,6 +6,7 @@ import order_book_routes from "./routes/order_book";
 
 import http from "http";
 import { WebSocketServer } from "ws"; // use ws library
+import feedbackFormrouter from "./routes/feedbackForm";
 
 const app = express();
 const server = http.createServer(app); // HTTP + WS combined
@@ -21,7 +22,7 @@ app.use(cors());
 // Routes
 app.use(add_user_routes);
 app.use(order_book_routes);
-
+app.use(feedbackFormrouter);
 // WebSocket connection handler
 wss.on("connection", (ws) => {
   console.log("WebSocket client connected");
@@ -33,7 +34,7 @@ wss.on("connection", (ws) => {
   });
 
   // Send initial message
-  ws.send("WebSocket connected to Cereberus");
+  
 });
 
 // Start HTTP + WebSocket server on same port
