@@ -23,7 +23,6 @@ export default function Fundme({ uid }: FundmeProps) {
   useEffect(() => {
     const fetchBalance = async () => {
       let cash_balance = await axios.get(`${url}/assets`, { params: { "uid": uid } });
-      console.log(cash_balance)
       setBalance(cash_balance.data.assets && cash_balance.data.assets["CASH"] ? cash_balance.data.assets["CASH"] : 0);
     };
     fetchBalance();
@@ -35,17 +34,17 @@ export default function Fundme({ uid }: FundmeProps) {
     if (fundType) {
       const cash = Number(amount);
       if (cash > 0) {
-        console.log("Updated Balance:", balance +cash);
         
         await axios.post(`${url}/add_update_details`, { 
           "uid": uid,
           "cash": amount,
-          "fundtype":fundType } );
+          "fundtype":fundType,
+        "mode": "add"} );
       }
     } else {
         const qty = Number(Quantity)
         if (ticker && qty > 0) {
-        console.log("Ticker:", ticker, "Quantity:", qty);
+        
         await axios.post(`${url}/add_update_details`, { 
          "uid": uid,
          "ticker": ticker,

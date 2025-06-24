@@ -59,14 +59,7 @@ function BuySellUI({uid, ticker, setTicker}:BuySellProps){
             
             return;
         }
-        console.log( {
-            "side": side ? "bid" : "ask",
-            "price": price,
-            "qty": qty,
-            "uid": uid,
-            "ticker": ticker
-        })
-        axios.post(`${url}/limit-order`, {
+           axios.post(`${url}/limit-order`, {
             "side": side ? "bid" : "ask",
             "price": price,
             "qty": qty,
@@ -74,7 +67,7 @@ function BuySellUI({uid, ticker, setTicker}:BuySellProps){
             "ticker": ticker
         })
         .then(response => {
-            console.log("Order placed successfully:", response.data);
+            
             if (response.data.message == false)
                 if (side== true){
                     setsuccess(false)

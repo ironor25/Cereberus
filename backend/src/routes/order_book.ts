@@ -52,18 +52,50 @@ order_book_routes.get("/assets",(req: any, res: any) => {
 })
 
 order_book_routes.post("/add_update_details",(req: any, res: any) => {
-    const uid = req.body.uid
-
     const  mode = req.body.mode
     if (mode == "add" ){
-            const cash = req.body.cash || 0 
-            balances.push({
-                "uid":uid,
-                "assets": {"CASH":cash}
-            })
-            return res.json({
-                    "message" : "User added!"
+        let message = ""
+            const uid = req.body.uid
+            const fundtype = req.body.fundtype
+            if (fundtype){
+                const cash = req.body.cash || 0 
+                let user_details =  balances.find(x => x.uid == uid)
+                if (user_details){
+                    user_details.assets["CASH"] = cash
+                    message = "Cash Balance updated!"
+                }
+                else{
+                balances.push({
+                    "uid":uid,
+                    "assets": {"CASH":cash}
+                    
                 })
+                message = "Cash Balance added!"
+               }
+             
+            }
+
+
+            else{
+                const ticker = req.body.ticker
+                const qty  = req.body.qty
+                let user_details =  balances.find(x => x.uid == uid)
+                if (user_details){
+                    user_details.assets[ticker] =  qty
+                    message = "Asset Balance updated!:>"
+                }
+                else{ 
+                balances.push({
+                    "uid":uid,
+                    "assets": {ticker:qty}})
+                    message = "Asset Balance added!"
+                }
+                 
+            }
+            return res.json({
+                        "message" : message
+                })
+
     }
     else{
             const fundtype = req.body.fundtype
@@ -85,6 +117,7 @@ order_book_routes.post("/add_update_details",(req: any, res: any) => {
             const ticker = req.body.ticker
             const qty  = req.body.qty
             let user_details =  balances.find(x => x.uid == uid)
+
             if (user_details){
                 user_details.assets[ticker] = ((user_details.assets[ticker] == undefined)? 0: user_details.assets[ticker]) + qty
                 message = "Asset Balance updated!"

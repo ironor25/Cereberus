@@ -25,14 +25,18 @@ const characters = 'abcdefghijklmnopqrstuvwxyz';
 const charactersLength = characters.length;
 
 export const signInWithGoogle = async (
-    
     setdetails: (user: any) => void,
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
     setLoading(true);
     try {
         let uid = '';
-        const result = await signInWithPopup(auth, provider);
+        const result = await signInWithPopup(auth, provider).catch((error) => {
+            // If user closes the popup or cancels login, revert loading
+            setLoading(false);
+            throw error;
+        });
+        if (!result) return; // If popup was closed, exit
         const user = result.user;
         let url = import.meta.env.VITE_BASE_URL
         const user_details = await axios.get(`${url}/get-user`, { params: { email: user.email } });
@@ -45,7 +49,8 @@ export const signInWithGoogle = async (
                 photoURL: user.photoURL,
                 UID: uid,
             });
-        } else {
+        } 
+        else {
             for (let i = 0; i < 2; i++) {
                 uid += characters.charAt(Math.floor(Math.random() * charactersLength)) + Math.floor(Math.random() * charactersLength);
             }
@@ -56,15 +61,27 @@ export const signInWithGoogle = async (
                 photoURL: user.photoURL,
                 UID: uid,
             });
-        }
 
-        await axios.post(`${url}/add-user`, {
+            await axios.post(`${url}/add-user`, {
             name: user.displayName,
             email: user.email,
             UID: uid,
         });
+
+            await axios.post(`${url}/add_update_details`,{
+                                
+                uid: uid,
+                mode: "add",
+                fundtype: true,
+                cash : 1000000
+                
+
+            })
+        }
+
+        
     } catch (error: any) {
-        // Handle error if needed
+        
     } finally {
         setLoading(false);
     }
