@@ -5,21 +5,15 @@ interface FundmeProps {
   uid: string;
 }
 
-
-
-interface FundmeProps {
-  uid: string;
-}
-
 export default function Fundme({ uid }: FundmeProps) {
   let url = import.meta.env.VITE_BASE_URL
   const [amount, setAmount] = useState("");
   const [balance, setBalance] = useState(0);
   const [showForm, setShowForm] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // <-- new state for popup
   const [fundType,setFundType] = useState(true);
   const [ticker,setticker] = useState<string>("")
   const [Quantity,setQuantity] = useState("");
-  
   useEffect(() => {
     const fetchBalance = async () => {
       let cash_balance = await axios.get(`${url}/assets`, { params: { "uid": uid } });
@@ -27,6 +21,8 @@ export default function Fundme({ uid }: FundmeProps) {
     };
     fetchBalance();
   }, []);
+
+
 
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -66,20 +62,22 @@ export default function Fundme({ uid }: FundmeProps) {
 
     <div>
       {showForm ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div
-            className="absolute inset-0 bg-transparent backdrop-blur-sm"
-            onClick={() => setShowForm(false)}
-          />
-          <form
-            onSubmit={handleSubmit}
-            className="relative z-10 bg-white rounded-xl p-6 shadow-lg w-80 text-black"
-          >
-            <label className="block text-black mb-2 font-medium text-2xl">Fund</label>
-            <label className="text-black font-medium cursor-pointer hover:text-blue-400" onClick={()=> {setFundType(true)}}>Cash</label>
-            <label className="text-black font-medium p-5 cursor-pointer hover:text-blue-400" onClick={()=> {setFundType(false)}}>Assets</label>
-            <hr className="text-black p-2"></hr>
-            {fundType  ? 
+        <>
+          {uid ? (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <div
+          className="absolute inset-0 bg-transparent backdrop-blur-sm"
+          onClick={() => setShowForm(false)}
+              />
+              <form
+          onSubmit={handleSubmit}
+          className="relative z-10 bg-white rounded-xl p-6 shadow-lg w-80 text-black"
+              >
+          <label className="block text-black mb-2 font-medium text-2xl">Fund</label>
+          <label className="text-black font-medium cursor-pointer hover:text-blue-400" onClick={() => { setFundType(true) }}>Cash</label>
+          <label className="text-black font-medium p-5 cursor-pointer hover:text-blue-400" onClick={() => { setFundType(false) }}>Assets</label>
+          <hr className="text-black p-2"></hr>
+          {fundType ?
             (<label className="font-medium">
               Amount
               <input
@@ -101,7 +99,7 @@ export default function Fundme({ uid }: FundmeProps) {
                 required
               >
                 <option value="" disabled>
-                  Select Asset
+            Select Asset
                 </option>
                 <option value="ETHUSD">ETHUSD</option>
                 <option value="BTCUSD">BTCUSD</option>
@@ -118,20 +116,38 @@ export default function Fundme({ uid }: FundmeProps) {
                 disabled={!ticker}
               />
             </label>}
-            <input
-              type="submit"
-              value="Submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md w-full cursor-pointer mt-4"
-            />
-          </form>
-        </div>
+          <input
+            type="submit"
+            value="Submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md w-full cursor-pointer mt-4"
+          />
+              </form>
+            </div>
+          ) : null}
+        </>
       ) : (
         <button
-          onClick={() => setShowForm(true)}
+          onClick={() => {
+            if (uid) {
+              setShowForm(true);
+            } else {
+              setShowPopup(true);
+              setTimeout(() => setShowPopup(false), 3000);
+            }
+          }}
           className="p-2 w-30 bg-lime-300 mt-4 rounded-md hover:bg-lime-500 text-black font-medium"
         >
           Fund Wallet
         </button>
+      )}
+
+      {showPopup && (
+        <div
+          className="fixed bottom-6 right-6 bg-red-100 text-red-700 p-4 rounded-md shadow-lg z-50"
+          style={{ minWidth: "220px" }}
+        >
+          Please log in to fund your wallet.
+        </div>
       )}
 
       <span className="mt-4 p-2 text-white">Balance: ₹{balance }</span>
