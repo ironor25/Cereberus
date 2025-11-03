@@ -1,16 +1,17 @@
 import { useState } from "react"
 import axios  from "axios";
+import { userStore } from "../store/user/userStore";
 
 
 interface BuySellProps {
-  uid: string;
   ticker: string;
   setTicker: (ticker: string) => void;
 }
 
 interface Message { message: string , success:Boolean}
 
-function BuySellUI({uid, ticker, setTicker}:BuySellProps){
+function BuySellUI({ ticker, setTicker}:BuySellProps){
+    const uid  = userStore.getState().uid
     let url = import.meta.env.VITE_BASE_URL
     const [side, setside] = useState<Boolean>(true)
     const [leverage, setLeverage] = useState<number>(1);

@@ -1,11 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { userStore } from "../store/user/userStore";
 
-interface FundmeProps {
-  uid: string;
-}
 
-export default function Fundme({ uid }: FundmeProps) {
+export default function Fundme() {
+  const uid  = userStore.getState().uid
   let url = import.meta.env.VITE_BASE_URL
   const [amount, setAmount] = useState("");
   const [balance, setBalance] = useState(0);
@@ -20,7 +19,7 @@ export default function Fundme({ uid }: FundmeProps) {
       setBalance(cash_balance.data.assets && cash_balance.data.assets["CASH"] ? cash_balance.data.assets["CASH"] : 0);
     };
     fetchBalance();
-  }, []);
+  }, [uid]);
 
 
 

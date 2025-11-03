@@ -27,8 +27,8 @@ function App() {
           
         </div>
         <nav className='text-white p-6'>
-          <a className='p-8 cursor-pointer text-white hover:text-lime-300  ' onClick={()=>{navigate("/")}}>Swap</a>
-          <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/perpetuals")}}>Perpetuals</a>
+          <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/")}}>Perpetuals</a>
+          <a className='p-8 cursor-pointer text-white hover:text-lime-300  ' onClick={()=>{navigate("/swap")}}>Swap</a>
           <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/portfolio")}}>Portfolio</a>
           <a className='p-8 cursor-pointer text-white hover:text-lime-300 ' onClick={()=>{navigate("/coins")}}>Coins</a>
           
@@ -40,9 +40,9 @@ function App() {
 
     
     <Routes>
-       <Route path='/' element={<Swap />} />
-       <Route path='/perpetuals' element={<Perps uid={details.UID ?? ""} />} />
-       <Route path='/portfolio' element={<Portfolio uid={details.UID ?? ""} />} />
+       <Route path='/' element={<Perps />} />
+       <Route path='/swap' element={<Swap />} />
+       <Route path='/portfolio' element={<Portfolio />} />
        <Route path='/coins' element={<Coin />} />
      </Routes>
       </div>

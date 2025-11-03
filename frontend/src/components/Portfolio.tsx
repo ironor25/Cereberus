@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import axios from "axios";
+import { userStore } from "../store/user/userStore";
 
 interface Assets {
   [key: string]: number;
 }
 
-interface PortfolioProps {
-  uid: string;
-}
+
 
 const categories = ["cash", "coins"];
 
-const Portfolio: React.FC<PortfolioProps> = ({ uid }) => {
+export default function Portfolio() {
+  const uid = userStore.getState().uid
   let url = import.meta.env.VITE_BASE_URL
   const [selectedCategory, setSelectedCategory] = useState<string>("cash");
   const [assets, setAssets] = useState<Assets>({});
@@ -85,4 +85,3 @@ const Portfolio: React.FC<PortfolioProps> = ({ uid }) => {
   );
 };
 
-export default Portfolio;

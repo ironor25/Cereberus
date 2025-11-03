@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.9.2",
     "@tailwindcss/vite": "^4.1.8",
     "@types/dotenv": "^6.1.1",
     "@types/pg": "^8.15.4",
@@ -20,6 +21,7 @@
     "pg": "^8.16.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.1",
     "tailwindcss": "^4.1.8"
   },

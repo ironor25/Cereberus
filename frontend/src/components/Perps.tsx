@@ -4,13 +4,7 @@ import BuySellUI from "./BuySellUI";
 import Fundme from "../services/Fundme";
 import OrderBook from "./OrderBook";
 
-interface PerpsProps {
-  uid: string;
-}
-
-function Perps({ uid }: PerpsProps) {
-    
-
+function Perps() {
     const [pair,setpair] = useState("BTC")
     const [ticker, setTicker] = useState("ETHUSD");
     let link = `https://s.tradingview.com/widgetembed/?symbol=${pair}USD&interval=15&theme=dark&style=1&locale=en`
@@ -49,7 +43,7 @@ function Perps({ uid }: PerpsProps) {
                 </div>
                 
                 <div className="flex justify-between w-2/6">
-                    <Fundme uid = {uid}/>
+                    <Fundme />
                     <span className="p-3 pt-4 text-3xl">$152</span>
                 </div>
             </div>
@@ -74,7 +68,7 @@ function Perps({ uid }: PerpsProps) {
             <div className="w-1/5 bg-slate-600/50"
             style={{ height: 'calc(90vh - 192px - 96px)' }} >
                     
-            <BuySellUI uid = {uid} ticker={ticker} setTicker={setTicker} />
+            <BuySellUI ticker={ticker} setTicker={setTicker} />
             </div>
             </div>
         </div>

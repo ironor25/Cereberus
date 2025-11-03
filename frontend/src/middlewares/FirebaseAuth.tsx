@@ -3,7 +3,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import axios from "axios";
 import { useState } from "react";
-
+import {userStore} from "../store/user/userStore"
+import { setUID } from "../store/user/userSlice";
 
 
 const firebaseConfig = {
@@ -30,7 +31,7 @@ export const signInWithGoogle = async (
 ) => {
     setLoading(true);
     try {
-        let uid = '';
+        let uid ="";
         const result = await signInWithPopup(auth, provider).catch((error) => {
             // If user closes the popup or cancels login, revert loading
             setLoading(false);
@@ -40,9 +41,10 @@ export const signInWithGoogle = async (
         const user = result.user;
         let url = import.meta.env.VITE_BASE_URL
         const user_details = await axios.get(`${url}/get-user`, { params: { email: user.email } });
-
+        
         if (user_details.data.email == user.email) {
             uid = user_details.data.UID;
+            userStore.dispatch(setUID(uid))
             setdetails({
                 name: user.displayName,
                 email: user.email,
@@ -54,7 +56,7 @@ export const signInWithGoogle = async (
             for (let i = 0; i < 2; i++) {
                 uid += characters.charAt(Math.floor(Math.random() * charactersLength)) + Math.floor(Math.random() * charactersLength);
             }
-
+            userStore.dispatch(setUID(uid))
             setdetails({
                 name: user.displayName,
                 email: user.email,
