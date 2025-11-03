@@ -11,9 +11,7 @@ function Swap(){
         }}
       >
         <div className="flex flex-col justify-center items-center mt-36">
-          <div className="w-xl">
-            <span>Cooking</span>
-          </div>
+          
           <div className="flex w-xl justify-between">
             <button
             className="bg-transparent p-3 rounded-2xl mr-2 w-40 cursor-pointer hover:bg-lime-300/20 active:bg-lime-300 transition-colors"
@@ -37,7 +35,13 @@ function Swap(){
             <span className="font-medium">Selling</span>
             </div>
             <div className="pt-5 flex justify-between">
-            <button className="bg-gray-700 w-20 h-10 rounded-xl"> SOL <select></select></button>
+            <button className="bg-gray-700 w-20 h-10 rounded-xl">  
+              <select className="cursor-pointer">
+                <option value="BTCUSD" className="text-black">BTC</option>
+                <option value="ETHUSD" className="text-black">ETH</option>
+                <option value="SOLUSD" className="text-black">SOL</option>
+              </select>
+            </button>
             <input className="border-2 border-gray-400" type="number"></input>
             </div>
           </div>
@@ -47,7 +51,13 @@ function Swap(){
             <span className="font-medium">Buying</span>
             </div>
             <div className="pt-5 flex justify-between">
-            <button className="bg-gray-700 w-20 h-10 rounded-xl"> SOL <select></select></button>
+            <button className="bg-gray-700 w-20 h-10 rounded-xl">  
+              <select className="cursor-pointer">
+                <option value="BTCUSD" className="text-black">BTC</option>
+                <option value="ETHUSD" className="text-black">ETH</option>
+                <option value="SOLUSD" className="text-black">SOL</option>
+              </select>
+            </button>
             <input className="border-2 border-gray-400" type="number"></input>
             </div>
           </div>
